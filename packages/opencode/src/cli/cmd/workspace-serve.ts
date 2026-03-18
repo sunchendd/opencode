@@ -1,6 +1,7 @@
 import { cmd } from "./cmd"
 import { withNetworkOptions, resolveNetworkOptions } from "../network"
 import { WorkspaceServer } from "../../control-plane/workspace-server/server"
+import { Server } from "../../server/server"
 
 export const WorkspaceServeCommand = cmd({
   command: "workspace-serve",
@@ -9,7 +10,7 @@ export const WorkspaceServeCommand = cmd({
   handler: async (args) => {
     const opts = await resolveNetworkOptions(args)
     const server = WorkspaceServer.Listen(opts)
-    console.log(`workspace event server listening on http://${server.hostname}:${server.port}/event`)
+    console.log(`workspace event server listening on ${Server.addr(server.hostname, server.port, "/event")}`)
     await new Promise(() => {})
     await server.stop()
   },

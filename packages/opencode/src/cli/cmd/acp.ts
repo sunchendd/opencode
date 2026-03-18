@@ -26,7 +26,7 @@ export const AcpCommand = cmd({
       const server = Server.listen(opts)
 
       const sdk = createOpencodeClient({
-        baseUrl: `http://${server.hostname}:${server.port}`,
+        baseUrl: Server.addr(server.hostname, server.port),
       })
 
       const input = new WritableStream<Uint8Array>({

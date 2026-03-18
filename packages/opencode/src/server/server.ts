@@ -55,6 +55,15 @@ export namespace Server {
 
   export const Default = lazy(() => createApp({}))
 
+  export function host(name: string) {
+    if (name.includes(":") && !name.startsWith("[")) return `[${name}]`
+    return name
+  }
+
+  export function addr(name: string, port: number, path = "") {
+    return `http://${host(name)}:${port}${path}`
+  }
+
   export const createApp = (opts: { cors?: string[] }): Hono => {
     const app = new Hono()
     return app
@@ -598,7 +607,7 @@ export namespace Server {
     mdnsDomain?: string
     cors?: string[]
   }) {
-    url = new URL(`http://${opts.hostname}:${opts.port}`)
+    url = new URL(addr(opts.hostname, opts.port))
     const app = createApp(opts)
     const args = {
       hostname: opts.hostname,
