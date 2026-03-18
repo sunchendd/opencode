@@ -10,7 +10,9 @@ export const WorkspaceServeCommand = cmd({
   handler: async (args) => {
     const opts = await resolveNetworkOptions(args)
     const server = WorkspaceServer.Listen(opts)
-    console.log(`workspace event server listening on ${Server.addr(server.hostname, server.port, "/event")}`)
+    const port = server.port
+    if (!port) throw new Error("Failed to resolve server port")
+    console.log(`workspace event server listening on ${Server.addr(opts.hostname, port, "/event")}`)
     await new Promise(() => {})
     await server.stop()
   },

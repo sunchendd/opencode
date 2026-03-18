@@ -24,9 +24,11 @@ export const AcpCommand = cmd({
     await bootstrap(process.cwd(), async () => {
       const opts = await resolveNetworkOptions(args)
       const server = Server.listen(opts)
+      const port = server.port
+      if (!port) throw new Error("Failed to resolve server port")
 
       const sdk = createOpencodeClient({
-        baseUrl: Server.addr(server.hostname, server.port),
+        baseUrl: Server.addr(opts.hostname, port),
       })
 
       const input = new WritableStream<Uint8Array>({

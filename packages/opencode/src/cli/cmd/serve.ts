@@ -16,7 +16,9 @@ export const ServeCommand = cmd({
     }
     const opts = await resolveNetworkOptions(args)
     const server = Server.listen(opts)
-    console.log(`opencode server listening on ${Server.addr(server.hostname, server.port)}`)
+    const port = server.port
+    if (!port) throw new Error("Failed to resolve server port")
+    console.log(`opencode server listening on ${Server.addr(opts.hostname, port)}`)
 
     await new Promise(() => {})
     await server.stop()
